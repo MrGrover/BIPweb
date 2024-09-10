@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from .managers import UserManager
 
 
 class UserModel(AbstractUser):
@@ -13,7 +14,11 @@ class UserModel(AbstractUser):
     otp_base32 = models.CharField(max_length=255, null=True)
     otp_auth_url = models.CharField(max_length=255, null=True)
     username = None
+    objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['password', 'name']
+    REQUIRED_FIELDS = ['name']
+
+    def __str__(self):
+        return self.email
 
