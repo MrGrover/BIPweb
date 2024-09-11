@@ -1,6 +1,5 @@
 from django.contrib.auth.base_user import BaseUserManager
 
-
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -28,3 +27,5 @@ class UserManager(BaseUserManager):
             raise ValueError('Администратор должен иметь is_superuser=True.')
 
         return self._create_user(email, password, **extra_fields)
+
+

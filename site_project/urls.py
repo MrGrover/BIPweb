@@ -20,6 +20,8 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+from .views import HomeView
+
 schema_view = get_schema_view(
     openapi.Info(
         title="Two-Factor Authentication API",
@@ -34,7 +36,8 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', HomeView.as_view(), name='home_page'),
+    path('admin/', admin.site.urls, name='admin_panel'),
     path('api/auth/', include('otp_app.urls')),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0), name='schema-json'),
