@@ -20,7 +20,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from .views import HomeView
+from .views import HomeView, UserProfileView
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -39,6 +39,7 @@ urlpatterns = [
     path('', HomeView.as_view(), name='home_page'),
     path('admin/', admin.site.urls, name='admin_panel'),
     path('api/auth/', include('otp_app.urls')),
+    path('profile', UserProfileView.as_view(), name='profile_page'),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0), name='schema-json'),
     re_path(r'^swagger/$', schema_view.with_ui('swagger',
