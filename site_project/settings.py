@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'otp_app',
     'drf_yasg',
+    'survey_app',
 ]
 
 MIDDLEWARE = [

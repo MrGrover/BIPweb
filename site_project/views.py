@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import status, generics
+from rest_framework.views import APIView
 
 from otp_app.permission import IsAuthenticatedAndVerified
 from otp_app.serializers import UserSerializer
@@ -7,6 +8,7 @@ from otp_app.models import UserModel
 
 from django.contrib.sessions.models import Session
 from django.utils import timezone
+
 
 class HomeView(generics.ListAPIView):
     def get(self, request):
@@ -16,8 +18,8 @@ class HomeView(generics.ListAPIView):
             return Response(serializer.data)
         return Response({'detail': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
 
+        # return Response({"status": "success", "message": "home page", "session_id": request.session.session_key})
 
-        #return Response({"status": "success", "message": "home page", "session_id": request.session.session_key})
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
@@ -43,3 +45,15 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SiteInfoView(APIView):
+    def get(self, request, *args, **kwargs):
+        # Здесь можно вернуть статическую информацию о сайте
+        site_info = {
+            "site_name": "MedicalSite",
+            "description": "This site is a project for the security of Internet applications",
+            "created": "ryadovoi Yasinskiy, عبد الماياتسكي, uletel Orel, toxic Podorov",
+            "contact_email": "andpodryv@gmail.com"
+        }
+        return Response(site_info)

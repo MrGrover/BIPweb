@@ -1,14 +1,13 @@
-from django.utils import timezone
-from django.contrib.sessions.models import Session
+
 from rest_framework.permissions import BasePermission
-from otp_app.models import UserModel
+from otp_app.models import UserModel, get_user_id
 
 
 class IsAuthenticatedAndVerified(BasePermission):
 
     #    Кастомное разрешение, проверяющее, что пользователь аутентифицирован и прошел вторую аутентификацию
     def has_permission(self, request, view):
-        # Получаем user_id из данных запроса
+        '''# Получаем user_id из данных запроса
         #user_id = request.data.get('user_id')
         session_id = request.COOKIES.get('sessionid')
         if not session_id:
@@ -21,10 +20,12 @@ class IsAuthenticatedAndVerified(BasePermission):
         # Получаем данные сессии
         session_data = session.get_decoded()
         # Извлекаем user_id из данных сессии
-        user_id = session_data.get('_auth_user_id')
+        '''
+        user_id = get_user_id(request)
         if not user_id:
             print('false')
             return False  # Если user_id не передан, отклоняем доступ
+
 
         try:
             # Ищем пользователя по переданному user_id
