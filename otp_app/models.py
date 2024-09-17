@@ -38,9 +38,9 @@ def get_user_id(request):
 
 class UserModel(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    first_name = models.CharField(max_length=50)
-    second_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=50, default=False)
+    second_name = models.CharField(max_length=50, default=False)
+    last_name = models.CharField(max_length=50, default=False)
     age = models.IntegerField(default=18)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default=False)
     blood_type = models.CharField(max_length=10, choices=BLOOD_TYPE_CHOICES, default=False)
