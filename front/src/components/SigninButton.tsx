@@ -79,7 +79,7 @@ const SignInButton: React.FC<SignInButtonProps> = ({ text }) => {
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-gray-800 text-white p-8 rounded-lg shadow-lg max-w-md w-full">
-            <h2 className="text-3xl mb-6 text-center font-bold">Sign in</h2>
+            <h2 className="text-3xl mb-6 text-center font-bold">Log in to your account</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <input
                 type="email"

@@ -27,6 +27,7 @@ class RegisterView(generics.GenericAPIView):
                 return Response({"status": "fail", "message": "User with that email already exists"},
                                 status=status.HTTP_409_CONFLICT)
         else:
+
             return Response({"status": "fail", "message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 

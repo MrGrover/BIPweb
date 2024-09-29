@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from .managers import UserManager
 from django.utils import timezone
 from django.contrib.sessions.models import Session
-
+from django.core.validators import MinValueValidator
 GENDER_CHOICES = [
     ('M', 'Male'),
     ('F', 'Female'),
@@ -41,7 +41,7 @@ class UserModel(AbstractUser):
     first_name = models.CharField(max_length=50, default=False)
     second_name = models.CharField(max_length=50, default=False)
     last_name = models.CharField(max_length=50, default=False)
-    age = models.IntegerField(default=18)
+    age = models.IntegerField(validators=[MinValueValidator(16)])
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default=False)
     blood_type = models.CharField(max_length=10, choices=BLOOD_TYPE_CHOICES, default=False)
     email = models.EmailField(max_length=100, unique=True)
