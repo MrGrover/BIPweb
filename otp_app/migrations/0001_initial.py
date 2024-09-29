@@ -32,6 +32,7 @@ class Migration(migrations.Migration):
                 ('otp_enabled', models.BooleanField(default=False)),
                 ('otp_verified', models.BooleanField(default=False)),
                 ('otp_base32', models.CharField(max_length=255, null=True)),
+                
                 ('otp_auth_url', models.CharField(max_length=255, null=True)),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),

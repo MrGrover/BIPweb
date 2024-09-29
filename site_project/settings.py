@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'rest_framework.authtoken',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'otp_app',
     'drf_yasg',
     'survey_app',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -52,7 +54,27 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',  # ваш фронтенд на Next.js
+]
+
+CORS_ALLOW_CREDENTIALS = True  # Разрешает учетные данные (например, куки) в запросах
+CORS_ALLOW_ORIGIN_REGEXES = [r"^http://localhost:3000$"]  # Замените на нужные источники
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'authorization',
+    'x-requested-with',
+    'accept',
+    'origin',
+    'user-agent',
+    'accept-encoding',
+    'access-control-allow-credentials',
+]
+
 
 ROOT_URLCONF = 'site_project.urls'
 

@@ -11,6 +11,7 @@ from otp_app.models import UserModel
 import pyotp
 
 
+
 class RegisterView(generics.GenericAPIView):
     serializer_class = UserSerializer
     queryset = UserModel.objects.all()
@@ -84,13 +85,12 @@ class LogoutView(generics.GenericAPIView):
             try:
                 token = Token.objects.get(user=request.user)
                 token.delete()
-            except Token.DoesNotExists:
+            except Token.DoesNotExist:
                 pass
             logout(request)
             return Response({'detail': 'Logout successful'}, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
-
 
 class GenerateOTP(generics.GenericAPIView):
     serializer_class = UserSerializer
@@ -123,24 +123,34 @@ class VerifyOTP(generics.GenericAPIView):
     queryset = UserModel.objects.all()
 
     def post(self, request):
-        message = "Token is invalid or user doesn't exist"
         data = request.data
         user_id = data.get('user_id', None)
         otp_token = data.get('token', None)
+
+        # Проверка наличия пользователя
         user = UserModel.objects.filter(id=user_id).first()
-        if user == None:
+        if user is None:
             return Response({"status": "fail", "message": f"No user with Id: {user_id} found"},
                             status=status.HTTP_404_NOT_FOUND)
 
+        # Проверка наличия секретного ключа для OTP
+        if not user.otp_base32:
+            return Response({"status": "fail", "message": "OTP is not enabled for this user"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # Проверка правильности введённого OTP
         totp = pyotp.TOTP(user.otp_base32)
         if not totp.verify(otp_token):
-            return Response({"status": "fail", "message": message}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": "fail", "message": "Invalid or expired OTP"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Верификация прошла успешно
         user.otp_validated = True
         user.otp_verified = True
         user.save()
-        serializer = self.serializer_class(user)
 
-        return Response({'otp_verified': True, "user": serializer.data})
+        # Возвращаем обновленные данные пользователя
+        serializer = self.serializer_class(user)
+        return Response({'otp_verified': True, "user": serializer.data}, status=status.HTTP_200_OK)
 
 
 class ValidateOTP(generics.GenericAPIView):
