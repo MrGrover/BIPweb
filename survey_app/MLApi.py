@@ -2,7 +2,7 @@ import pickle
 import numpy as np
 import pandas as pd
 
-# тестовое
+# тестовая функция
 def test():
     # Шаг 1: Загрузка модели и скалера
     with open('svc_model.pkl', 'rb') as model_file:
@@ -55,37 +55,24 @@ def test():
 
 def parse_survey_answer(survey_answer):
     #['22', 'женский', 'нет', 'нет', 'да', 'нет', 'нет', 'нет', 'нет', 'нет', 'нет', 'нет', 'нет', 'да', 'нет', 'нет']
-    answers = []
-    answers.append(survey_answer[0])
-    if survey_answer[1] == 'мужской':
-        gender = 'Male'
-    else:
-        gender = 'Female'
-    answers.append(gender)
-    for answer_id in range(2, 16):
-        if survey_answer[answer_id] == 'да':
-            answers.append('Yes')
-        else:
-            answers.append('No')
+    symptoms = [
+        'Polyuria', 'Polydipsia', 'sudden weight loss', 'weakness', 'Polyphagia',
+        'Genital thrush', 'visual blurring', 'Itching', 'Irritability',
+        'delayed healing', 'partial paresis', 'muscle stiffness', 'Alopecia', 'Obesity'
+    ]
+
+    gender = 'Male' if survey_answer[1] == 'мужской' else 'Female'
+
+    # Преобразуем ответы на симптомы
+    symptom_answers = ['Yes' if answer == 'да' else 'No' for answer in survey_answer[2:16]]
+
+    # Формируем итоговый словарь
     parse_data = {
-        'Age': answers[0],
-        'Gender': answers[1],
-        'Polyuria': answers[2],
-        'Polydipsia': answers[3],
-        'sudden weight loss': answers[4],
-        'weakness': answers[5],
-        'Polyphagia': answers[6],
-        'Genital thrush': answers[7],
-        'visual blurring': answers[8],
-        'Itching': answers[9],
-        'Irritability': answers[10],
-        'delayed healing': answers[11],
-        'partial paresis': answers[12],
-        'muscle stiffness': answers[13],
-        'Alopecia': answers[14],
-        'Obesity': answers[15]
+        'Age': survey_answer[0],
+        'Gender': gender,
+        **dict(zip(symptoms, symptom_answers))
     }
-    #print(parse_data)
+
     return parse_data
 
 def get_model_answer(survey_answer):

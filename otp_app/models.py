@@ -51,6 +51,7 @@ class UserModel(AbstractUser):
     otp_base32 = models.CharField(max_length=255, null=True)
     otp_auth_url = models.CharField(max_length=255, null=True)
     is_active = models.BooleanField(default=True)
+    # добавить мб инн
 
     username = None
     objects = UserManager()

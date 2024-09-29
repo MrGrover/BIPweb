@@ -50,7 +50,10 @@ class LoginView(generics.GenericAPIView):
 
         serializer = self.serializer_class(user)
         login(request, user)
-        return Response({"status": "success", "user": serializer.data})
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({"status": "success", "firstname": serializer.data['first_name'],
+                         "lastname": serializer.data['last_name'], "email": serializer.data['email'],
+                         "token": token.key})
 
 
 class LogoutView(generics.GenericAPIView):
@@ -78,8 +81,13 @@ class LogoutView(generics.GenericAPIView):
             user.otp_validated = False
             user.save()
             serializer = self.serializer_class(user)
+            try:
+                token = Token.objects.get(user=request.user)
+                token.delete()
+            except Token.DoesNotExists:
+                pass
             logout(request)
-            return Response({'detail': 'Logout successful', "user": serializer.data}, status=status.HTTP_200_OK)
+            return Response({'detail': 'Logout successful'}, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
 
