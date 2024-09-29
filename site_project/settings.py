@@ -33,7 +33,6 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
-    'rest_framework.authtoken',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -60,6 +59,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',  # ваш фронтенд на Next.js
+    'http://127.0.0.1:3000',  # ваш фронтенд на Next.js
 ]
 
 CORS_ALLOW_CREDENTIALS = True  # Разрешает учетные данные (например, куки) в запросах

@@ -31,14 +31,14 @@ class IsAuthenticatedAndVerified(BasePermission):
             # Ищем пользователя по переданному user_id
             user = UserModel.objects.get(id=user_id)
             print(user.is_active)
-            print(user.otp_validated)
+            print(user.otp_verified)
             print(user.email)
             print(user.is_authenticated)
         except UserModel.DoesNotExist:
             return False  # Если пользователь не найден, отклоняем доступ
 
 
-        return bool(user.is_active and user.otp_validated and request.user.is_authenticated)
+        return bool(user.is_active and user.otp_verified and request.user.is_authenticated)
 
     def has_object_permission(self, request, view, obj):
         print('1')

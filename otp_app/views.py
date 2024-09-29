@@ -79,7 +79,7 @@ class LogoutView(generics.GenericAPIView):
             if user is None:
                 return Response({"status": "fail", "message": f"No user with Id: {user_id} found"},
                                 status=status.HTTP_404_NOT_FOUND)
-            user.otp_validated = False
+            user.otp_verified = False
             user.save()
             serializer = self.serializer_class(user)
             try:
@@ -113,6 +113,7 @@ class GenerateOTP(generics.GenericAPIView):
 
         user.otp_auth_url = otp_auth_url
         user.otp_base32 = otp_base32
+        user.otp_mode = True
         user.save()
         # добавить ссылку на ввод далее
         return Response({'base32': otp_base32, "otpauth_url": otp_auth_url})
@@ -125,7 +126,7 @@ class VerifyOTP(generics.GenericAPIView):
     def post(self, request):
         data = request.data
         user_id = data.get('user_id', None)
-        otp_token = data.get('token', None)
+        otp_token = data.get('otp_token', None)
 
         # Проверка наличия пользователя
         user = UserModel.objects.filter(id=user_id).first()
@@ -134,7 +135,7 @@ class VerifyOTP(generics.GenericAPIView):
                             status=status.HTTP_404_NOT_FOUND)
 
         # Проверка наличия секретного ключа для OTP
-        if not user.otp_base32:
+        if not user.otp_base32 and user.otp_mode:
             return Response({"status": "fail", "message": "OTP is not enabled for this user"},
                             status=status.HTTP_400_BAD_REQUEST)
 
@@ -144,40 +145,12 @@ class VerifyOTP(generics.GenericAPIView):
             return Response({"status": "fail", "message": "Invalid or expired OTP"}, status=status.HTTP_400_BAD_REQUEST)
 
         # Верификация прошла успешно
-        user.otp_validated = True
         user.otp_verified = True
         user.save()
 
         # Возвращаем обновленные данные пользователя
         serializer = self.serializer_class(user)
         return Response({'otp_verified': True, "user": serializer.data}, status=status.HTTP_200_OK)
-
-
-class ValidateOTP(generics.GenericAPIView):
-    serializer_class = UserSerializer
-    queryset = UserModel.objects.all()
-
-    def post(self, request):
-        message = "Token is invalid or user doesn't exist"
-        data = request.data
-        user_id = data.get('user_id', None)
-        otp_token = data.get('token', None)
-        user = UserModel.objects.filter(id=user_id).first()
-        if user is None:
-            return Response({"status": "fail", "message": f"No user with Id: {user_id} found"},
-                            status=status.HTTP_404_NOT_FOUND)
-
-        if not user.otp_verified:
-            return Response({"status": "fail", "message": "OTP must be verified first"},
-                            status=status.HTTP_404_NOT_FOUND)
-
-        totp = pyotp.TOTP(user.otp_base32)
-        if not totp.verify(otp_token, valid_window=1):
-            return Response({"status": "fail", "message": message}, status=status.HTTP_400_BAD_REQUEST)
-        user.otp_validated = True
-        user.save()
-        serializer = self.serializer_class(user)
-        return Response({'otp_validated': True})
 
 
 class DisableOTP(generics.GenericAPIView):
@@ -194,7 +167,7 @@ class DisableOTP(generics.GenericAPIView):
             return Response({"status": "fail", "message": f"No user with Id: {user_id} found"},
                             status=status.HTTP_404_NOT_FOUND)
 
-        user.otp_validated = False
+        user.otp_mode = False
         user.otp_verified = False
         user.otp_base32 = None
         user.otp_auth_url = None
