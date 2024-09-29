@@ -1,5 +1,5 @@
 # BIPweb/front 
-- npm rund dev
+- npm run dev
 # BIPweb(back)
 - python manage.py migrate
 - python manage.py runserver
