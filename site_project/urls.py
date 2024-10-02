@@ -40,7 +40,7 @@ urlpatterns = [
     path('admin/', admin.site.urls, name='admin_panel'),
     path('api/auth/', include('otp_app.urls')),
     path('profile/', UserProfileView.as_view(), name='profile_page'),
-    path('site-info/', SiteInfoView.as_view(), name='profile_page'),
+    path('site-info/', SiteInfoView.as_view(), name='site_info_page'),
     path('api/survey/', include('survey_app.urls')),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0), name='schema-json'),

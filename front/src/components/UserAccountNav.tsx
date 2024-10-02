@@ -57,18 +57,18 @@ const UserAccountNav: React.FC<UserAccountNavProps> = ({ user }) => {
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-white dark:bg-zinc-800" align="end">
-        <div className="flex items-center justify-start gap-2 p-2">
-          <div className="flex flex-col space-y-1 leading-none">
-            {user.firstName && user.lastName && (
-              <p className="font-medium">{`${user.firstName} ${user.lastName}`}</p>
-            )}
-            {user.email && (
-              <p className="w-[200px] truncate text-sm text-zinc-700 dark:text-zinc-300">
-                {user.email}
-              </p>
-            )}
-          </div>
-        </div>
+  <div className="flex items-center justify-start gap-2 p-2">
+    <div className="flex flex-col space-y-1 leading-none">
+      {user.firstName || user.lastName ? (
+        <p className="font-medium">{`${user.firstName || ''} ${user.lastName || ''}`.trim()}</p>
+      ) : null}
+      {user.email && (
+        <p className="w-[200px] truncate text-sm text-zinc-700 dark:text-zinc-300">
+          {user.email}
+        </p>
+      )}
+    </div>
+  </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild className="text-black dark:text-white">
           <a href="/profile">Profile</a>
@@ -80,7 +80,7 @@ const UserAccountNav: React.FC<UserAccountNavProps> = ({ user }) => {
           onClick={handleLogout} // Изменен тип на совместимый
           className="text-red-600 cursor-pointer"
         >
-          Sign out
+          Log out
           <LogOut className="w-4 h-4 ml-2 " />
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -23,21 +23,20 @@ const Navbar = () => {
         </Link>
         <div className="ml-auto flex items-center">
           <ThemeToggle className="mr-3" />
-          {user ? (
-            <UserAccountNav user={user} />
-          ) : loading ? (
-            <div className="flex items-center justify-center">
-              <Loader className="animate-spin w-6 h-6 text-black dark:text-white" />
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              
-              <RegisterButton text="Log in" className="text-black dark:text-white hover:underline" />
-              <span className="text-black dark:text-white mx-1">or</span>
-              
-              <SignInButton text="Sign up" />
-            </div>
-          )}
+          {user && user.otp_verified ? (
+  <UserAccountNav user={user} />
+) : loading ? (
+  <div className="flex items-center justify-center">
+    <Loader className="animate-spin w-6 h-6 text-black dark:text-white" />
+  </div>
+) : (
+  <div className="flex items-center gap-2">
+    <RegisterButton text="Sign in" className="text-black dark:text-white hover:underline" />
+    <span className="text-black dark:text-white mx-1">or</span>
+    <SignInButton text="Login" />
+  </div>
+)}
+
         </div>
       </div>
     </div>

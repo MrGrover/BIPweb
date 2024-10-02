@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ['id', "first_name", "second_name", "last_name", 'age', 'gender', 'blood_type',
-                  'email', 'password', 'otp_verified', 'otp_validated',
+                  'email', 'password', 'otp_validate', 'otp_verified', 'otp_mode',
                   'otp_base32', 'otp_auth_url']
         #fields = '__all__'
 

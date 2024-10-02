@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useTheme } from 'next-themes';
 
 interface RegisterButtonProps {
   text: string;
@@ -20,6 +21,7 @@ const RegisterButton: React.FC<RegisterButtonProps> = ({ text, className }) => {
     password: ''
   });
   const [message, setMessage] = useState('');
+  const { theme } = useTheme();
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -44,45 +46,47 @@ const RegisterButton: React.FC<RegisterButtonProps> = ({ text, className }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-        const response = await fetch('http://localhost:8000/api/auth/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        });
+      const response = await fetch('http://localhost:8000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (response.ok) {
-            setMessage('Registration successful!');
-            // Закрытие окна с небольшой задержкой
-            setTimeout(() => {
-                handleCloseModal();
-            }, 1000); // Задержка в 1 секунду (1000 миллисекунд)
-        } else {
-            // Если data.message является объектом, распарсим его вручную
-            if (typeof data.message === 'object') {
-                let errorMessages = '';
-
-                for (const key in data.message) {
-                    if (data.message.hasOwnProperty(key)) {
-                        // Присоединяем все сообщения, разделяя их точкой с пробелом
-                        errorMessages += `${data.message[key].join(' ')} `;
-                    }
-                }
-
-                setMessage(errorMessages.trim() || 'Registration failed');
-            } else {
-                setMessage(data.message || 'Registration failed');
+      if (response.ok) {
+        setMessage('Registration successful!');
+        // Закрытие окна с небольшой задержкой
+        setTimeout(() => {
+          handleCloseModal();
+        }, 1000);
+      } else {
+        if (typeof data.message === 'object') {
+          let errorMessages = '';
+          for (const key in data.message) {
+            if (data.message.hasOwnProperty(key)) {
+              errorMessages += `${data.message[key].join(' ')} `;
             }
+          }
+          setMessage(errorMessages.trim() || 'Registration failed');
+        } else {
+          setMessage(data.message || 'Registration failed');
         }
+      }
     } catch (error) {
-        console.error(error);
-        setMessage('An error occurred.');
+      console.error(error);
+      setMessage('An error occurred.');
     }
-};
+  };
 
+  // Применяем стили в зависимости от темы
+  const modalBackground = theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-gray-900';
+  const inputBackground = theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-900';
+  const borderColor = theme === 'dark' ? 'border-gray-600' : 'border-gray-300';
+  const healthFormTextColor = theme === 'dark' ? 'text-red-400' : 'text-blue-400'; // Цвет HealthForm в зависимости от темы
+  const registerButtonColor = theme === 'dark' ? 'bg-red-600 hover:bg-red-700' : 'bg-black hover:bg-gray-800'; // Цвет кнопки Register в зависимости от темы
 
   return (
     <>
@@ -92,9 +96,9 @@ const RegisterButton: React.FC<RegisterButtonProps> = ({ text, className }) => {
 
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-gray-800 text-white p-8 rounded-lg shadow-lg max-w-sm w-11/12 relative overflow-hidden">
-            <h2 className="text-3xl mb-6 text-center font-bold">
-              Get started with <span className="text-blue-400">HealthForm</span> today
+          <div className={`p-8 rounded-lg shadow-lg max-w-sm w-11/12 relative overflow-hidden ${modalBackground}`}>
+            <h2 className={`text-3xl mb-6 text-center font-bold`}>
+              Get started with <span className={`${healthFormTextColor}`}>HealthForm</span> today
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
@@ -103,7 +107,7 @@ const RegisterButton: React.FC<RegisterButtonProps> = ({ text, className }) => {
                 placeholder="First Name"
                 value={formData.first_name}
                 onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:border-blue-500"
+                className={`w-full p-3 rounded ${inputBackground} placeholder-gray-400 border ${borderColor} focus:outline-none focus:border-blue-500`}
               />
               <input
                 type="text"
@@ -111,7 +115,7 @@ const RegisterButton: React.FC<RegisterButtonProps> = ({ text, className }) => {
                 placeholder="Second Name"
                 value={formData.second_name}
                 onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:border-blue-500"
+                className={`w-full p-3 rounded ${inputBackground} placeholder-gray-400 border ${borderColor} focus:outline-none focus:border-blue-500`}
               />
               <input
                 type="text"
@@ -119,7 +123,7 @@ const RegisterButton: React.FC<RegisterButtonProps> = ({ text, className }) => {
                 placeholder="Last Name"
                 value={formData.last_name}
                 onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:border-blue-500"
+                className={`w-full p-3 rounded ${inputBackground} placeholder-gray-400 border ${borderColor} focus:outline-none focus:border-blue-500`}
               />
               <input
                 type="number"
@@ -127,13 +131,13 @@ const RegisterButton: React.FC<RegisterButtonProps> = ({ text, className }) => {
                 placeholder="Age"
                 value={formData.age}
                 onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:border-blue-500"
+                className={`w-full p-3 rounded ${inputBackground} placeholder-gray-400 border ${borderColor} focus:outline-none focus:border-blue-500`}
               />
               <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:border-blue-500"
+                className={`w-full p-3 rounded ${inputBackground} placeholder-gray-400 border ${borderColor} focus:outline-none focus:border-blue-500`}
               >
                 <option value="M">Male</option>
                 <option value="F">Female</option>
@@ -142,7 +146,7 @@ const RegisterButton: React.FC<RegisterButtonProps> = ({ text, className }) => {
                 name="blood_type"
                 value={formData.blood_type}
                 onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:border-blue-500"
+                className={`w-full p-3 rounded ${inputBackground} placeholder-gray-400 border ${borderColor} focus:outline-none focus:border-blue-500`}
               >
                 <option value="I">First</option>
                 <option value="II">Second</option>
@@ -155,7 +159,7 @@ const RegisterButton: React.FC<RegisterButtonProps> = ({ text, className }) => {
                 placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:border-blue-500"
+                className={`w-full p-3 rounded ${inputBackground} placeholder-gray-400 border ${borderColor} focus:outline-none focus:border-blue-500`}
               />
               <input
                 type="password"
@@ -163,7 +167,7 @@ const RegisterButton: React.FC<RegisterButtonProps> = ({ text, className }) => {
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:border-blue-500"
+                className={`w-full p-3 rounded ${inputBackground} placeholder-gray-400 border ${borderColor} focus:outline-none focus:border-blue-500`}
               />
               <div className="flex justify-between items-center space-x-4">
                 <button
@@ -175,7 +179,7 @@ const RegisterButton: React.FC<RegisterButtonProps> = ({ text, className }) => {
                 </button>
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className={`text-white px-4 py-2 rounded ${registerButtonColor}`}
                 >
                   Register
                 </button>
