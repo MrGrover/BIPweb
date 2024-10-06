@@ -188,8 +188,9 @@ const SignInButton: React.FC<SignInButtonProps> = ({ text }) => {
 
       {isOtpDialogOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className={`p-8 rounded-lg shadow-lg max-w-md w-full ${modalBackground}`}>
+          <div className={`p-11 rounded-lg shadow-lg max-w-md w-full ${modalBackground}`}>
             <h2 className="text-3xl mb-6 text-center font-bold">Enter Your OTP</h2>
+            
             <form onSubmit={handleOtpSubmit} className="space-y-6">
               <InputOTP
               maxLength={6}

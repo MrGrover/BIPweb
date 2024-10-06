@@ -24,6 +24,7 @@ interface UserProfile {
   bloodType: string;
   email: string;
   otp_mode: boolean;
+  is_superuser: boolean;
 }
 
 const UserProfilePage = () => {
@@ -77,6 +78,7 @@ const UserProfilePage = () => {
           otp_mode: data.otp_mode,
           otp_verified: data.otp_verified,
           otp_validate: data.otp_validate,
+          is_superuser: data.is_superuser,
         };
         setProfileData(formattedData);
         setFormData(formattedData);
@@ -220,7 +222,14 @@ const UserProfilePage = () => {
               </p>
             </div>
           </div>
-
+          {profileData.is_superuser && (
+            <Button
+              onClick={() => (window.location.href = 'http://localhost:8000/admin')}
+              className="bg-black dark:bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700 dark:hover:bg-yellow-600 transition-all duration-300"
+            >
+              Go to Admin Panel
+            </Button>
+          )}
           {/* Edit Profile Button and Dialog */}
           <Dialog>
             <DialogTrigger asChild>

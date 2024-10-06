@@ -173,7 +173,7 @@ const RegisterButton: React.FC<RegisterButtonProps> = ({ text, className }) => {
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                  className="bg-purple-800 text-white px-4 py-2 rounded hover:bg-purple-700"
                 >
                   Close
                 </button>
