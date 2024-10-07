@@ -2,13 +2,14 @@ from rest_framework.response import Response
 from rest_framework import status, generics
 from rest_framework.views import APIView
 
-from otp_app.permission import IsAuthenticatedAndVerified
+#from otp_app.permission import IsAuthenticatedAndVerified
 from otp_app.serializers import UserSerializer
 from rest_framework.permissions import AllowAny
 from otp_app.models import UserModel
 
 from django.contrib.sessions.models import Session
 from django.utils import timezone
+from rest_framework.permissions import AllowAny
 
 
 class HomeView(generics.ListAPIView):
@@ -25,7 +26,7 @@ class HomeView(generics.ListAPIView):
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
-
+    #permission_classes = [IsAuthenticatedAndVerified]
     def get_object(self):
         return self.request.user
 

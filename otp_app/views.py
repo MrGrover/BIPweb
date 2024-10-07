@@ -67,7 +67,6 @@ class LoginView(generics.GenericAPIView):
                 "firstname": serializer.data['first_name'],
                 "lastname": serializer.data['last_name'],
                 "email": serializer.data['email'],
-                "su": serializer.data['is_superuser'],
                 "token": token.key  # Передаем токен, чтобы фронтенд мог использовать его для дальнейших запросов
             }, status=status.HTTP_202_ACCEPTED)  # Используем статус 202 для обозначения, что требуется дальнейшее действие
 

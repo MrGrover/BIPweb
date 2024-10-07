@@ -1,6 +1,6 @@
 from django.urls import path
-from otp_app.views import (RegisterView, LoginView, GenerateOTP, VerifyOTP,
-                           DisableOTP, LogoutView, LogoutView, ValidateOTP)
+from otp_app.views import (RegisterView, LoginView, GenerateOTP, ValidateOTP, VerifyOTP,
+                           DisableOTP, LogoutView, LogoutView)
 
 urlpatterns = [
     path('register', RegisterView.as_view(), name='registration_page'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('otp/validate', ValidateOTP.as_view(), name='otp_vldt_page'),
     path('otp/verify', VerifyOTP.as_view(), name='otp_vrf_page'),
     path('otp/disable', DisableOTP.as_view(), name='otp_dsbl_page'),
+    path('otp/validate', ValidateOTP.as_view(), name='otp_vldt_page'),
 ]

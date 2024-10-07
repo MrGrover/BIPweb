@@ -3,6 +3,10 @@ from otp_app.models import UserModel
 
 
 class UserSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(required=False, allow_blank=True)
+    second_name = serializers.CharField(required=False, allow_blank=True)
+    last_name = serializers.CharField(required=False, allow_blank=True)
+
     class Meta:
         model = UserModel
         fields = ['id', "first_name", "second_name", "last_name", 'age', 'gender', 'blood_type',

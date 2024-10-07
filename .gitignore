@@ -28,4 +28,8 @@ node_modules/
 
 # Исключение локальных конфигурационных файлов
 *.local
+<<<<<<< HEAD
 .env.local
+=======
+.env.local
+>>>>>>> origin/may
