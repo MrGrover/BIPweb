@@ -50,18 +50,6 @@ def get_user_id(request):
     token_key = auth_header.split()[1]
     return token_key
 
-def get_user_id(request):
-
-    token_key = get_user_token(request)
-
-    try:
-        # Находим пользователя по токену
-        token = Token.objects.get(key=token_key)
-        user_id = token.user_id
-        return user_id
-    except Token.DoesNotExist:
-        return False
-
 class UserModel(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=50, default=False)

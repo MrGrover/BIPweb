@@ -44,6 +44,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
         user = self.get_object()
         print(user)
         serializer = self.serializer_class(user, data=request.data, partial=True)
+        print(request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
