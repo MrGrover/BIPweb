@@ -22,10 +22,10 @@ from .serializers import SurveyAnswerSerializer
 class SurveyDetailView(generics.RetrieveAPIView):
     queryset = Survey.objects.all()
     serializer_class = SurveySerializer
-    permission_classes = [IsAuthenticatedAndVerified]
 
 
 def parse_answer(question_id, answer):
+    print(question_id, answer)
     if question_id == 1:
         if int(answer) in range(20, 66):
             #print('proba')

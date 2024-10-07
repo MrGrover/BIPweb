@@ -6,8 +6,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ['id', "first_name", "second_name", "last_name", 'age', 'gender', 'blood_type',
-                  'email', 'password', 'otp_verified', 'otp_mode',
-                  'otp_base32', 'otp_auth_url']
+                  'email', 'password', 'otp_validate', 'otp_verified', 'otp_mode',
+                  'otp_base32', 'otp_auth_url', 'is_superuser']
         #fields = '__all__'
 
         extra_kwargs = {

@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 
 from otp_app.permission import IsAuthenticatedAndVerified
 from otp_app.serializers import UserSerializer
+from rest_framework.permissions import AllowAny
 from otp_app.models import UserModel
 
 from django.contrib.sessions.models import Session
@@ -11,6 +12,7 @@ from django.utils import timezone
 
 
 class HomeView(generics.ListAPIView):
+    permission_classes = [AllowAny]
     def get(self, request):
         user = request.user  # Получение пользователя из запроса
         if user.is_authenticated:
@@ -23,7 +25,6 @@ class HomeView(generics.ListAPIView):
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticatedAndVerified]
 
     def get_object(self):
         return self.request.user
@@ -40,6 +41,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
     def put(self, request, *args, **kwargs):
         user = self.get_object()
+        print(user)
         serializer = self.serializer_class(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -48,6 +50,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
 
 class SiteInfoView(APIView):
+    permission_classes = [AllowAny]
     def get(self, request, *args, **kwargs):
         # Здесь можно вернуть статическую информацию о сайте
         site_info = {
